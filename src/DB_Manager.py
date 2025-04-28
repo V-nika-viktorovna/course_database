@@ -16,7 +16,7 @@ class DBManager():
                                      user='postgres',
                                      password=pass_pgadmin)
 
-    def get_companies_and_vacancies_count(self):
+    def get_companies_and_vacancies_count(self) -> list:
         """Метод получает список всех компаний и количество вакансий у каждой компании."""
 
         cur = self.conn.cursor()
@@ -30,7 +30,9 @@ class DBManager():
 
         return result_list
 
-    def get_all_vacancies(self):
+    def get_all_vacancies(self) -> list:
+        """Метод получает список всех вакансий с указанием названия компании,
+        названия вакансии, зарплаты и ссылки на вакансию"""
 
         cur = self.conn.cursor()
 
@@ -50,7 +52,8 @@ class DBManager():
 
         return result_list
 
-    def get_avg_salary(self):
+    def get_avg_salary(self) -> list:
+        """Метод получает среднюю зарплату по всем вакансиям в БД"""
 
         cur = self.conn.cursor()
 
@@ -62,7 +65,8 @@ class DBManager():
 
         return result
 
-    def get_vacancies_with_higher_salary(self):
+    def get_vacancies_with_higher_salary(self) -> list:
+        """Метод получает список всех вакансий, у которых зарплата выше средней по всем вакансиям"""
 
         cur = self.conn.cursor()
 
@@ -83,7 +87,8 @@ class DBManager():
 
         return result_list
 
-    def get_vacancies_with_keyword(self, data_search: str):
+    def get_vacancies_with_keyword(self, data_search: str) -> list:
+        """Метод получает список всех вакансий, в названии которых содержатся ключевое слово"""
 
         cur = self.conn.cursor()
 
@@ -91,6 +96,11 @@ class DBManager():
                     FROM vacancies JOIN employers USING (employer_id)\
                     WHERE vacancies_name ILIKE '%" + data_search + "%'")
         result_list = cur.fetchall()
+
+        if len(result_list) == 0:
+            print('Вакансий с таким ключевым словом не найдено')
+            return result_list
+
         for data in result_list:
             if data[2] == 0 or data[2] is None:
                 salary = 'Зарплата не указана'
