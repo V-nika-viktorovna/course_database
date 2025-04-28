@@ -180,6 +180,5 @@ if __name__ == '__main__':
 
     creat_database('vacancies_top10_employers')
     result_employers_list = get_data_employers(employers_list)
-    #print(result_employers_list)
     filling_employers(result_employers_list, 'vacancies_top10_employers')
     filling_vacancies(result_employers_list, 'vacancies_top10_employers')
